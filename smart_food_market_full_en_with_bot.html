@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Food Market — Home</title>
+  <style>
+    :root{ --g1:#2e7d32; --g2:#43a047; --g3:#81c784; --bg:#eef7f0; --ink:#223; --ok:#d32f2f; }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;background:var(--bg);color:var(--ink)}
+    header{
+      text-align:center;padding:62px 16px 36px;color:#fff;
+      background:linear-gradient(135deg,var(--g1),var(--g2));
+      box-shadow:0 6px 18px rgba(0,0,0,.18)
+    }
+    header h1{margin:0 0 8px;font-size:34px}
+    header p{margin:0;opacity:.95}
+    .wrap{max-width:1140px;margin:24px auto;padding:0 16px}
+    .filters{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0 6px;}
+    select,input[type=text],button.primary{
+      padding:10px 14px;border:1px solid #cfe4d2;border-radius:12px;font-size:15px;background:#fff;
+    }
+    button.primary{background:linear-gradient(135deg,var(--g3),var(--g2));color:#fff;border:none;cursor:pointer}
+    .map{background:#e8f5e9;border:1px solid #d2e9d5;border-radius:16px;padding:12px;box-shadow:0 6px 18px rgba(46,125,50,.12)}
+    .map iframe{width:100%;height:360px;border:0;border-radius:12px}
+    h2{margin:28px 0 12px;text-align:center}
+    .sales-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px}
+    .product{
+      background:#f1fbf3;border:1px solid #d9efdb;border-radius:16px;padding:16px;text-align:center;
+      box-shadow:0 10px 18px rgba(0,0,0,.06);
+    }
+    .product img{width:100%;height:140px;object-fit:cover;border-radius:12px;margin-bottom:10px}
+    .badge{display:inline-block;background:#ff7043;color:#fff;padding:4px 8px;border-radius:999px;font-size:12px;margin-bottom:8px}
+    .title{font-weight:800;margin:6px 0}
+    .sub{color:#456;margin:0 0 4px}
+    .old{color:#888;text-decoration:line-through;margin-right:6px}
+    .new{color:#1b5e20;font-weight:800}
+    .buy{display:inline-block;margin-top:6px;background:#81c784;color:#fff;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
+    .testimonials{margin-top:34px}
+    .pill{background:#eef9f0;border:1px solid #d6ead8;border-radius:18px;padding:18px;margin:12px auto;max-width:860px;box-shadow:0 6px 16px rgba(0,0,0,.04);font-style:italic;text-align:center}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
+    .modal.active{display:flex}
+    .sheet{max-width:440px;width:100%;background:#fff;border-radius:18px;padding:22px;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.35);border:2px solid #d32f2f}
+    .thanks{display:inline-block;background:#d32f2f;color:#fff;padding:6px 10px;border-radius:999px;margin-bottom:10px;font-weight:700}
+    .sheet h3{margin:6px 0 4px}
+    .sheet p{margin:0 0 12px;color:#456}
+    .sheet .close{background:#e8f5e9;color:#1b5e20;border:none;border-radius:12px;padding:10px 14px;cursor:pointer}
+    footer{margin:34px 0 80px;text-align:center;color:#678}
+    .prefs{font-size:14px;color:#456}
+    .bot-fab{position:fixed;right:24px;bottom:24px;background:linear-gradient(135deg,#43a047,#2e7d32);color:#fff;border:none;border-radius:999px;width:56px;height:56px;display:flex;align-items:center;justify-content:center;box-shadow:0 12px 24px rgba(0,0,0,.25);cursor:pointer;font-size:22px;z-index:60}
+    .bot-panel{position:fixed;right:24px;bottom:92px;width:320px;background:#fff;border:1px solid #e2eee5;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.25);display:none;flex-direction:column;overflow:hidden;z-index:60}
+    .bot-head{background:linear-gradient(135deg,#2e7d32,#43a047);color:#fff;padding:10px 12px;font-weight:700}
+    .bot-msgs{padding:10px;height:260px;overflow:auto;background:#f7fbf8}
+    .msg{margin:6px 0;padding:8px 10px;border-radius:10px;max-width:85%}
+    .msg.bot{background:#e8f5e9;border:1px solid #cfe7d2}
+    .msg.me{background:#e3f2fd;border:1px solid #cfe0f4;align-self:flex-end}
+    .bot-input{display:flex;gap:8px;padding:10px;border-top:1px solid #eef2ef;background:#fff}
+    .bot-input input{flex:1;padding:10px;border:1px solid #d9e9dc;border-radius:10px}
+    .bot-input button{padding:10px 12px;border:none;border-radius:10px;background:#43a047;color:#fff;cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Food Market</h1>
+    <p>Shop smart. Eat safe.</p>
+    <div class="filters">
+      <select>
+        <option>All diets</option>
+        <option>Vegan</option>
+        <option>Gluten‑free</option>
+        <option>Lactose‑free</option>
+        <option>Sugar‑free</option>
+        <option>Keto</option>
+      </select>
+      <input type="text" placeholder="Product name…" />
+      <button class="primary" onclick="alert('Search — demo')">Search</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <section class="map">
+      <h2>Healthy stores nearby</h2>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12048.561080438679!2d71.4180094586203!3d51.16943131235834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3875326b58f574db%3A0x93be2f0f6c1290e4!2sAstana%2C%20Kazakhstan!5e0!3m2!1sen!2s!4v1632815567213!5m2!1sen!2s" allowfullscreen></iframe>
+    </section>
+
+    <section>
+      <h2>Popular Organic Products</h2>
+      <div class="sales-grid" id="products"></div>
+      <div id="modal" class="modal" role="dialog" aria-modal="true">
+        <div class="sheet">
+          <div class="thanks">Thank you for your purchase</div>
+          <h3 id="pname">Your item has been added (demo)</h3>
+          <p>Tap “Close” to continue browsing.</p>
+          <button class="close" onclick="closeModal()">Close</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <h2>User Testimonials</h2>
+      <div class="pill">“It helps me quickly find lactose‑free products!” — Ernur, 19</div>
+      <div class="pill">“I love how simple it is to use.” — Aizat, 27</div>
+      <div class="pill">“Finally, I can avoid citrus products for my child.” — Sulushash, 38</div>
+    </section>
+
+    <footer>
+      <div class="prefs">Preferences not set.</div>
+      <div>Contacts: 📞 +7 (777) 123‑45‑67 • ✉️ smartfood@gmail.com</div>
+    </footer>
+  </div>
+
+  <button class="bot-fab" title="Chat with SmartBot" onclick="toggleBot()">💬</button>
+  <div class="bot-panel" id="bot">
+    <div class="bot-head">SmartBot</div>
+    <div class="bot-msgs" id="botMsgs">
+      <div class="msg bot">Hi! Ask me for vegan, gluten‑free or allergy‑safe options.</div>
+    </div>
+    <div class="bot-input">
+      <input id="botIn" type="text" placeholder="Type a message…" onkeydown="if(event.key==='Enter') sendBot()" />
+      <button onclick="sendBot()">Send</button>
+    </div>
+  </div>
+
+<script>
+  const catalog = [
+    {name:'Organic Nuts', old:9.99, price:7.99, unit:'/ pack', img:'https://cdn.pixabay.com/photo/2017/01/20/15/06/hazelnuts-1990674_640.jpg', sale:'-20%'},
+    {name:'Fresh Avocados', old:2.99, price:2.49, unit:'/ each', img:'https://cdn.pixabay.com/photo/2016/03/05/19/02/avocado-1238257_640.jpg', sale:'-17%'},
+    {name:'Green Tea', old:6.50, price:5.50, unit:'/ box', img:'https://cdn.pixabay.com/photo/2016/03/05/22/15/tea-1239423_640.jpg', sale:'-15%'},
+    {name:'Natural Juice', old:4.99, price:3.99, unit:'/ bottle', img:'https://cdn.pixabay.com/photo/2016/11/29/13/14/beverage-1869598_640.jpg', sale:'-20%'},
+    {name:'Healthy Granola', old:7.50, price:6.25, unit:'/ pack', img:'https://cdn.pixabay.com/photo/2017/06/30/07/48/granola-2450579_640.jpg', sale:'-17%'},
+    {name:'Almond Milk', old:5.60, price:4.75, unit:'/ bottle', img:'https://cdn.pixabay.com/photo/2018/02/21/15/06/almond-3166153_640.jpg', sale:'-15%'},
+    {name:'Gluten‑free Bread', old:4.40, price:3.90, unit:'/ loaf', img:'https://cdn.pixabay.com/photo/2015/09/17/17/19/bread-944495_640.jpg', sale:'-11%'},
+    {name:'Oat Cookies', old:5.90, price:5.10, unit:'/ pack', img:'https://cdn.pixabay.com/photo/2017/07/16/10/43/cookies-2506053_640.jpg', sale:'-14%'}
+  ];
+  function drawProducts(){
+    const box = document.getElementById('products');
+    box.innerHTML = '';
+    catalog.forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'product';
+      el.innerHTML = `
+        <span class="badge">SALE ${p.sale}</span>
+        <img src="${p.img}" alt="${p.name}">
+        <div class="title">${p.name}</div>
+        <div class="sub"><span class="old">$ ${p.old.toFixed(2)}</span><span class="new">$ ${p.price.toFixed(2)}</span> <span>${p.unit}</span></div>
+        <button class="buy" onclick="buy('${p.name}')">Buy Now</button>
+      `;
+      box.appendChild(el);
+    });
+  }
+  function buy(name){
+    document.getElementById('modal').classList.add('active');
+    document.getElementById('pname').textContent = name + ' — added. Thank you!';
+  }
+  function closeModal(){ document.getElementById('modal').classList.remove('active'); }
+  function toggleBot(){
+    const p = document.getElementById('bot');
+    p.style.display = (p.style.display==='flex') ? 'none' : 'flex';
+    if(p.style.display==='flex'){ document.getElementById('botIn').focus(); }
+  }
+  function sendBot(){
+    const input = document.getElementById('botIn');
+    const txt = input.value.trim();
+    if(!txt) return;
+    addMsg(txt,'me');
+    let reply = "Try our Almond Milk (lactose‑free) and Gluten‑free Bread.";
+    const t = txt.toLowerCase();
+    if(t.includes('vegan')) reply = "Vegan picks: Almond Milk, Fresh Avocados, Green Tea.";
+    if(t.includes('gluten')) reply = "Gluten‑free picks: Gluten‑free Bread and Oat Cookies.";
+    if(t.includes('lactose')) reply = "Lactose‑free picks: Almond Milk.";
+    if(t.includes('sugar')) reply = "Sugar‑free picks: Organic Nuts and Green Tea.";
+    addMsg(reply,'bot');
+    input.value='';
+  }
+  function addMsg(text, who){
+    const box = document.getElementById('botMsgs');
+    const div = document.createElement('div');
+    div.className = 'msg ' + who;
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+  drawProducts();
+</script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Food Market — Registration</title>
+  <style>
+    :root{ --g1:#2e7d32; --g2:#43a047; --g3:#81c784; --bg:#eef7f0; --ink:#223; }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: radial-gradient(1200px 600px at 10% -10%, #dff3e2 0%, transparent 60%),
+                  radial-gradient(1000px 500px at 110% 10%, #e6f6ea 0%, transparent 60%),
+                  var(--bg);
+      color:var(--ink);
+    }
+    header{
+      padding:48px 16px 16px; text-align:center; color:white;
+      background:linear-gradient(135deg,var(--g1),var(--g2));
+      box-shadow:0 6px 18px rgba(0,0,0,.15);
+    }
+    header h1{margin:0 0 6px;font-size:32px}
+    header p{margin:0 0 16px;opacity:.9}
+    main{max-width:860px;margin:28px auto;padding:0 16px 48px;}
+    .card{
+      background:#fff;border-radius:16px;padding:24px 18px;
+      box-shadow:0 10px 24px rgba(46,125,50,.15), inset 0 1px 0 rgba(255,255,255,.3);
+      border:1px solid #e8efe9;
+    }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    @media (max-width:720px){ .row{grid-template-columns:1fr;} }
+    label{display:block;margin:10px 0 6px;font-weight:600}
+    input[type="text"],input[type="tel"],input[type="email"],select,textarea{
+      width:100%;padding:12px 14px;border:1px solid #ccd8cf;border-radius:12px;
+      font-size:15px;outline:none;transition:border .2s, box-shadow .2s;background:#fbfdfb;
+    }
+    input:focus,select:focus,textarea:focus{border-color:var(--g2); box-shadow:0 0 0 4px rgba(67,160,71,.12)}
+    .group{margin:14px 0}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+    .chip{padding:8px 12px;border:1px solid #c8e6c9;border-radius:999px;cursor:pointer;user-select:none;background:#f5fbf6}
+    .chip.active{background:linear-gradient(135deg,var(--g3),var(--g2));color:white;border-color:transparent}
+    .actions{margin-top:18px;display:flex;gap:12px;justify-content:flex-end}
+    button{
+      padding:12px 18px;border:none;border-radius:12px;cursor:pointer;font-weight:600;
+      box-shadow:0 8px 16px rgba(67,160,71,.24);
+    }
+    .primary{background:linear-gradient(135deg,var(--g2),var(--g1));color:#fff}
+    .secondary{background:#e8f5e9;color:#1b5e20}
+    .hint{font-size:13px;color:#577}
+    footer{margin-top:18px;text-align:center;color:#577}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Smart Food Market</h1>
+    <p>Quick start: tell us your preferences and we’ll tailor products.</p>
+  </header>
+  <main>
+    <div class="card">
+      <h2>Registration</h2>
+      <div class="row">
+        <div>
+          <label>Name</label>
+          <input id="name" type="text" placeholder="Your name" />
+        </div>
+        <div>
+          <label>Phone</label>
+          <input id="phone" type="tel" placeholder="+7 (___) ___-__-__" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>E‑mail</label>
+          <input id="email" type="email" placeholder="name@example.com" />
+        </div>
+        <div>
+          <label>City</label>
+          <input id="city" type="text" placeholder="e.g., Astana" value="Astana" />
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Lifestyle</label>
+        <div class="chips" id="lifestyle">
+          <div class="chip">Healthy</div>
+          <div class="chip">Vegan</div>
+          <div class="chip">Vegetarian</div>
+          <div class="chip">Keto</div>
+          <div class="chip">Sugar‑free</div>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Allergies (select all that apply)</label>
+        <div class="chips" id="allergies">
+          <div class="chip">Lactose</div>
+          <div class="chip">Gluten</div>
+          <div class="chip">Peanut/Nuts</div>
+          <div class="chip">Citrus</div>
+          <div class="chip">Honey</div>
+          <div class="chip">Egg</div>
+        </div>
+        <div class="hint">We’ll hide risky items and show alternatives.</div>
+      </div>
+
+      <div class="group">
+        <label>Notes</label>
+        <textarea id="notes" rows="3" placeholder="Brands, budget, goals, etc."></textarea>
+      </div>
+
+      <div class="actions">
+        <button class="secondary" type="button" onclick="prefill()">Prefill sample</button>
+        <button class="primary" type="button" onclick="saveAndGo()">Save & Continue</button>
+      </div>
+      <footer>By continuing you agree to data processing.</footer>
+    </div>
+  </main>
+
+<script>
+  document.addEventListener('click', (e)=>{
+    if(e.target.classList.contains('chip')) e.target.classList.toggle('active');
+  });
+
+  function collectChips(id){
+    return Array.from(document.querySelectorAll('#'+id+' .chip.active')).map(x=>x.textContent.trim());
+  }
+
+  function prefill(){
+    document.getElementById('name').value = 'REALMAdrid';
+    document.getElementById('phone').value = '+7 (777) 123-45-67';
+    document.getElementById('email').value = 'user@example.com';
+    document.getElementById('city').value = 'Astana';
+    const ls = document.querySelectorAll('#lifestyle .chip');
+    if(ls[0]) ls[0].classList.add('active');
+    if(ls[4]) ls[4].classList.add('active');
+    const al = document.querySelectorAll('#allergies .chip');
+    if(al[0]) al[0].classList.add('active');
+  }
+
+  function saveAndGo(){
+    const profile = {
+      name: document.getElementById('name').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      city: document.getElementById('city').value.trim(),
+      lifestyle: collectChips('lifestyle'),
+      allergies: collectChips('allergies'),
+      notes: document.getElementById('notes').value.trim(),
+      ts: Date.now()
+    };
+    localStorage.setItem('sfm_profile', JSON.stringify(profile));
+    window.location.href = 'smart_food_market_full_en_with_bot.html';
+  }
+</script>
+</body>
+</html>
